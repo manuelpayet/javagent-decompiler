@@ -1,0 +1,31 @@
+group 'com.github.manuelpayet'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    archiveName = "${rootProject.name}-${rootProject.version}.jar"
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }}
+
+    manifest {
+        attributes(
+                'Premain-Class': 'com.github.manuelpayet.Agent',
+                'Can-Redefine-Classes': 'true',
+                'Can-Retransform-Classes': 'true',
+                'Can-Set-Native-Method-Prefix': 'true',
+                'Implementation-Title': "ClassLogger",
+                'Implementation-Version': rootProject.version
+        )
+    }
+}
+
+dependencies {
+    compile group: 'org.jboss.windup.decompiler', name: 'decompiler-fernflower', version: '4.0.1.Final'
+}
